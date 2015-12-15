@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">`
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Blizzard Videos</title>
+	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="./css/style.css" />
+
+  <script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>  
+  <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+  <script type="text/javascript" src="./js/underscore-min.js"></script>
+  <script type="text/javascript" src="./js/backbone-min.js"></script>
+  <script type="text/javascript" src="./js/handlebars-v4.0.5.js"></script>
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+</head>
+<body ng-app="myVideo">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Videos</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">PlayList</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="starter-template">
+      <h1>Hansan's Youtube Playlist</h1>
+      <p class="lead">This project was launched in order to study Angularjs.<br> You can see my favorite youtube videos. Enjoy yourself!</p>
+    </div>
+
+  </div><!-- /.container -->
+  
+  <div class="container">
+    <!-- Example row of columns -->
+    <div id="video-list-area" class="row">
+      
+      <script id="video-list-template" type="text/x-handlebars-template">
+      {{#each this}}
+      <div class="col-md-4">
+        <div class="thumbnail">
+          <div class="embed-responsive embed-responsive-4by3">
+            <img class="img-responsive" src="{{ this.snippet.thumbnails.standard.url }}" alt="{{ this.snippet.title }}">
+          </div>
+          <div class="caption video-block">
+            <h4 class="link-button">{{ this.snippet.title }}</h4>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+      </script>
+      <!-- Modal -->
+    </div>
+    <hr>
+    <footer>
+      <p>&copy; Mr.Tint 2015</p>
+    </footer>
+  </div> <!-- /container -->
+  <script type="text/javascript">
+    var Video = Backbone.Model.extend({
+      initialize: function(){
+        
+      }
+    })
+    var Videos = Backbone.Collection.extend({
+      model: Video,
+      initialize: function(){
+        
+      },
+      url : "datas/videos.json",
+      parse: function(res, xhr){
+        return res.result;
+      }
+    })
+
+    var VideoListView = Backbone.View.extend({
+      el: '#video-list-area',
+      initialize:function(){
+        this.render()
+      },
+      render: function(){
+        var obj = this;
+        this.model.fetch({
+          success: function(){
+            var source = $('#video-list-template').html()
+            var template = Handlebars.compile(source)
+            var html = template(obj.model.toJSON())
+            obj.$el.html(html)
+          }
+        })
+      }
+    })
+    var videos = new Videos();
+    var videoListView = new VideoListView({model : videos});
+  </script>
+</body>
+  
+</html>

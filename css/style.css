@@ -1,0 +1,16 @@
+body {
+  padding-top : 50px;
+}
+.starter-template {
+  padding : 40px 15px;
+}
+.video-block {
+	overflow : hidden; 
+	text-overflow : ellipsis; 
+}
+.link-button:hover {
+	cursor: pointer;
+}
+.video-desc {
+	white-space: pre-wrap;
+}
